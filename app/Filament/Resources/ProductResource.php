@@ -4,6 +4,8 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
+use App\Filament\Resources\ProductResource\RelationManagers\GulasRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\SembakoRelationManager;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -26,9 +28,11 @@ class ProductResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('category_id')
+                Forms\Components\Select::make('category_id')
                     ->required()
-                    ->numeric(),
+                    ->options(function () {
+                        return \App\Models\Category::all()->pluck('name', 'id');
+                    }),
             ]);
     }
 
@@ -38,8 +42,8 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('category_id')
-                    ->numeric()
+                Tables\Columns\TextColumn::make('category.name')
+                    ->label('Category')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -66,7 +70,8 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            SembakoRelationManager::class,
+            GulasRelationManager::class,
         ];
     }
 

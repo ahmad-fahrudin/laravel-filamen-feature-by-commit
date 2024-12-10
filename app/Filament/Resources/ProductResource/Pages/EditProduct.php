@@ -2,9 +2,11 @@
 
 namespace App\Filament\Resources\ProductResource\Pages;
 
-use App\Filament\Resources\ProductResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
+use App\Filament\Resources\ProductResource;
+use App\Filament\Resources\ProductResource\RelationManagers\GulasRelationManager;
+use App\Filament\Resources\ProductResource\RelationManagers\SembakoRelationManager;
 
 class EditProduct extends EditRecord
 {
@@ -14,6 +16,13 @@ class EditProduct extends EditRecord
     {
         return [
             Actions\DeleteAction::make(),
+        ];
+    }
+    public static function getRelations(): array
+    {
+        return [
+            SembakoRelationManager::class,
+            GulasRelationManager::class,
         ];
     }
 }
